@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Corporate Credit Card Policies — Carenet</title>
+  <meta name="description" content="Carenet corporate credit card policy hub with search, categories, and print-ready view." />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --card: #f8fafc;
+      --accent: #0ea5e9;
+      --accent-2: #0369a1;
+      --ring: rgba(14,165,233,.35);
+      --border: #e5e7eb;
+      --code-bg: #0f172a;
+      --code-fg: #e2e8f0;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1220;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --card: #0f172a;
+        --accent: #38bdf8;
+        --accent-2: #7dd3fc;
+        --ring: rgba(56,189,248,.35);
+        --border: #1f2937;
+        --code-bg: #111827;
+        --code-fg: #d1d5db;
+      }
+    }
+    html, body {height: 100%}
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+    .container {max-width: 1100px; margin: 0 auto; padding: 24px;}
+    header { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(140%) blur(6px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom: 1px solid var(--border); }
+    .header-inner {display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 24px; max-width: 1100px; margin: 0 auto;}
+    h1 {font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2.2rem); margin: 0; text-wrap: balance;}
+    .actions {display: flex; gap: 8px; align-items: center;}
+    .btn {border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600;}
+    .btn:focus, .btn:hover {outline: none; box-shadow: 0 0 0 3px var(--ring); border-color: var(--accent)}
+    .btn.primary {background: var(--accent); border-color: var(--accent); color: white}
+    .btn.link {background: transparent; border-color: transparent; color: var(--accent);}
+
+    .toolbar {display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0 8px}
+    .search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); padding: 10px 12px; border-radius: 12px; }
+    .search input {flex: 1; font-size: 16px; border: none; outline: none; background: transparent; color: var(--text)}
+    .pill {padding: 6px 10px; border-radius: 999px; border:1px solid var(--border); background: var(--card); cursor: pointer; font-size: 14px}
+    .pill.active {border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring)}
+
+    .grid {display:grid; grid-template-columns: 1fr; gap: 14px}
+    @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+    .card {border: 1px solid var(--border); background: var(--card); border-radius: 14px; overflow: clip}
+    .card header {position: relative; top: unset; backdrop-filter: none; background: transparent; border: none}
+    .card .title {font-weight: 700; font-size: 1.05rem; margin: 0}
+    .meta {font-size: 12px; color: var(--muted)}
+
+    details {border-top: 1px dashed var(--border)}
+    details[open] summary .chev {transform: rotate(90deg)}
+    summary {list-style: none; padding: 16px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; cursor: pointer;}
+    summary::-webkit-details-marker {display: none}
+    .chev {transition: transform .2s ease}
+    .summary-title {font-weight: 600}
+    .content {padding: 0 16px 16px; color: var(--text); line-height: 1.55}
+    .content p {margin: 10px 0}
+    .content a {color: var(--accent)}
+
+    .toc { position: sticky; top: 76px; border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 12px; }
+    .toc h3 { margin: 0 0 8px; font-size: .95rem }
+    .toc a { display:block; text-decoration: none; color: var(--text); padding: 6px 8px; border-radius: 8px; border: 1px solid transparent}
+    .toc a:hover, .toc a:focus { border-color: var(--border); outline: none }
+
+    .note {font-size: 14px; color: var(--muted)}
+    .kbd {font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .9em; padding: 2px 6px; border-radius: 6px; border:1px solid var(--border); background: var(--bg);}
+
+    .footer {text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0}
+
+    @media print {
+      header, .toolbar, .toc, .footer, .actions { display: none !important }
+      body { background: #fff; color: #000 }
+      .container { max-width: unset; padding: 0 }
+      .card { border: none; page-break-inside: avoid }
+      details[open] summary { border-bottom: 1px solid #ddd }
+    }
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <div class="header-inner">
+      <h1 id="page-title">Corporate Credit Card Policies</h1>
+      <div class="actions">
+        <button class="btn" id="toggleThemeBtn" aria-pressed="false" title="Toggle dark mode">Toggle Theme</button>
+        <button class="btn" id="expandAllBtn">Expand All</button>
+        <button class="btn" id="collapseAllBtn">Collapse All</button>
+        <button class="btn primary" id="printBtn">Print / Save PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="app" role="main">
+    <div class="toolbar" aria-label="Policy filters and search">
+      <label class="search" aria-label="Search policies">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        <input id="search" type="search" placeholder="Search policy, e.g., receipts, per diem, limits" autocomplete="off" />
+        <kbd class="kbd" title="Keyboard shortcut">/</kbd>
+      </label>
+      <div class="filters" role="group" aria-label="Category filters" id="filterPills"></div>
+    </div>
+
+    <div class="grid">
+      <section aria-label="Policy content" id="policyGrid"></section>
+      <aside class="toc" aria-label="On this page" id="toc"></aside>
+    </div>
+
+    <p class="note" id="lastUpdatedNote">Last updated: <span data-last-updated></span></p>
+
+    <section class="footer">
+      <p>Questions? Contact <a href="mailto:finance@carenethealthcare.com">finance@carenethealthcare.com</a>.</p>
+    </section>
+  </main>
+
+  <script>
+    // ---------- Editable data (customize for your company) ----------
+    const CONFIG = {
+      companyName: "Carenet",
+      contactEmail: "finance@carenethealthcare.com",
+      resources: [
+        // { label: "Full Corporate Card Policy (PDF)", href: "./Corporate-Card-Policy.pdf" }
+      ],
+      categories: [
+        {
+          id: "overview",
+          label: "Overview",
+          items: [
+            {
+              id: "goal",
+              title: "Goal",
+              updated: "2025-08-11",
+              body: `To set forth the Company guidelines that apply to all Team Members who use the corporate credit card.`
+            },
+            {
+              id: "policy-scope",
+              title: "Policy & Scope",
+              updated: "2025-08-11",
+              body: `Carenet conveys expectations and procedures for use, safeguarding, payment, and termination of the corporate credit card. This policy applies to any Team Member who signs out a card for use or is issued a card. The cardholder, the person signing out a shared card, and the Supervisor are responsible for adherence and for minimizing the risk of fraudulent or improper use. Corporate cards provide an efficient, flexible, alternative means of payment for approved expenses.`
+            }
+          ]
+        },
+        {
+          id: "eligibility",
+          label: "Eligibility & Approval",
+          items: [
+            {
+              id: "eligibility-criteria",
+              title: "Eligibility",
+              updated: "2025-08-11",
+              body: `Carenet maintains a corporate credit card program for full‑time Team Members who will regularly incur business expenses. Eligible Team Members travel frequently as part of their duties, purchase significant volumes of minor goods/services for company use, or frequently incur other business‑related expenses appropriately paid by a corporate card.`
+            },
+            {
+              id: "approval-process",
+              title: "Approval & Issuance",
+              updated: "2025-08-11",
+              body: `Eligible Team Members should contact the CFO (Plan Administrator), who will arrange issuance. Based on business needs, Carenet will offer eligible Team Members a corporate credit card for approved expenses. Newly issued cards must be signed by the cardholder upon receipt.`
+            }
+          ]
+        },
+        {
+          id: "checkout",
+          label: "Signing Out a Card",
+          items: [
+            {
+              id: "card-signout",
+              title: "Shared Card Sign‑Out",
+              updated: "2025-08-11",
+              body: `Team Members not eligible for an individual card may sign out a corporate card from Finance for approved purchases. The person signing out the card is responsible for all charges until the card is returned. Cards must be signed out for each transaction and returned promptly to Finance. Failure to sign out a card and using a stored card will result in disciplinary action, including loss of future access.`
+            }
+          ]
+        },
+        {
+          id: "use",
+          label: "Use & Responsibilities",
+          items: [
+            {
+              id: "business-use-only",
+              title: "Business Use Only",
+              updated: "2025-08-11",
+              body: `The corporate card may be used only for official business expenditures, not personal expenses. Card users must ensure purchases are within budget and properly approved. Carenet pays the monthly balance for approved charges.`
+            },
+            {
+              id: "card-custody",
+              title: "Card Custody & Delegation",
+              updated: "2025-08-11",
+              body: `Issued corporate credit cards may be used by individuals designated by the cardholder. The cardholder remains accountable for all activity on the card.`
+            },
+            {
+              id: "secure-online",
+              title: "Secure Online Use",
+              updated: "2025-08-11",
+              body: `When making approved internet purchases, use recognized encryption (https). Card numbers must not be saved or stored in online accounts or browsers.`
+            },
+            {
+              id: "lost-stolen",
+              title: "Lost or Stolen Cards",
+              updated: "2025-08-11",
+              body: `Report immediately to American Express and to the Carenet Finance Department.`
+            }
+          ]
+        },
+        {
+          id: "receipts",
+          label: "Receipts & Expense Reports",
+          items: [
+            {
+              id: "receipt-requirements",
+              title: "Receipt Requirements & Expense Submission",
+              updated: "2025-08-11",
+              body: `Maintain physical proof (itemized receipt) of each credit transaction and provide an itemized, approved expense report to Finance. Missing receipts or inadequate explanations may result in payroll debit, forfeiture of reimbursement, and/or disciplinary action. Credible documentation includes: date, vendor, description, amount, total, and proof of purchase. When applicable, annotate business purpose and attendees with titles/affiliations. Receipts and reports are encouraged to be uploaded to the Certify system as they are incurred.`
+            }
+          ]
+        },
+        {
+          id: "verification",
+          label: "Verification of Charges",
+          items: [
+            {
+              id: "monthly-verification",
+              title: "Monthly Review",
+              updated: "2025-08-11",
+              body: `Finance downloads charges and sends them to the cardholder monthly for review. If an expense report is not received within 2–3 business days after notice, a reminder will be sent. Continued or repeated non‑conformance may result in card cancellation and/or other actions.`
+            }
+          ]
+        },
+        {
+          id: "disputes",
+          label: "Disputed Items",
+          items: [
+            {
+              id: "cardholder-disputes",
+              title: "Dispute Process",
+              updated: "2025-08-11",
+              body: `Cardholders must follow up on erroneous charges, returns, or adjustments to ensure proper credit on subsequent statements. Disputes must be reported to American Express immediately for resolution; inform the CFO or Finance as well.`
+            }
+          ]
+        },
+        {
+          id: "violations",
+          label: "Violations & Consequences",
+          items: [
+            {
+              id: "violation-examples",
+              title: "Examples of Violations",
+              updated: "2025-08-11",
+              body: `Prohibited actions include, but are not limited to: cash advances or other non‑business expenses; personal transactions; allowing unauthorized users to use the card; failing to return a shared card promptly; leaving the card unattended; not submitting expense reports with proper receipts by deadlines; saving card numbers on computers, sites, or phones.`
+            },
+            {
+              id: "enforcement",
+              title: "Enforcement",
+              updated: "2025-08-11",
+              body: `Transactions are heavily scrutinized for compliance. Infractions may result in disciplinary action up to and including termination. Carenet will consider the facts and circumstances of each incident and take appropriate action, including recovery of monetary amounts. Carenet may suspend or cancel privileges at any time for any reason. The card must be surrendered to Finance upon request.`
+            }
+          ]
+        },
+        {
+          id: "termination",
+          label: "Card Cancellation & Offboarding",
+          items: [
+            {
+              id: "cancellation",
+              title: "Cancellation of the Credit Card",
+              updated: "2025-08-11",
+              body: `Upon notice of Team Member resignation, the card must be returned to Finance. The cardholder must reconcile all expenditures since the last statement, and ensure the account is settled prior to departure.`
+            }
+          ]
+        }
+      ]
+    };
+
+    // ---------- Utility helpers ----------
+    const qs = s => document.querySelector(s);
+    const el = (tag, attrs = {}, children = []) => {
+      const n = document.createElement(tag);
+      for (const [k,v] of Object.entries(attrs)) {
+        if (k === 'class') n.className = v;
+        else if (k === 'html') n.innerHTML = v;
+        else if (k.startsWith('on') && typeof v === 'function') n.addEventListener(k.slice(2), v);
+        else if (v !== null && v !== undefined) n.setAttribute(k, v);
+      }
+      for (const c of children) n.append(c);
+      return n;
+    };
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'2-digit' });
+    }
+
+    function mountResources(actionsEl) {
+      if (!CONFIG.resources?.length) return;
+      for (const r of CONFIG.resources) {
+        const a = el('a', { href: r.href, target: '_blank', rel: 'noopener', class: 'btn link' });
+        a.textContent = r.label;
+        actionsEl.prepend(a);
+      }
+    }
+
+    function mountFilters() {
+      const holder = qs('#filterPills');
+      const allBtn = el('button', { class:'pill active', 'data-id': 'all', onclick: () => setFilter('all') }, ['All']);
+      holder.append(allBtn);
+      for (const c of CONFIG.categories) {
+        holder.append(el('button', { class:'pill', 'data-id': c.id, onclick: () => setFilter(c.id) }, [c.label]));
+      }
+    }
+
+    function setFilter(id) {
+      for (const b of document.querySelectorAll('.pill')) b.classList.toggle('active', b.dataset.id === id);
+      for (const sec of document.querySelectorAll('[data-category]')) {
+        const show = (id === 'all' || sec.dataset.category === id);
+        sec.style.display = show ? '' : 'none';
+      }
+      buildTOC();
+    }
+
+    function buildPolicies() {
+      const grid = qs('#policyGrid');
+      grid.innerHTML = '';
+
+      CONFIG.categories.forEach(cat => {
+        const section = el('section', { class:'card', id: cat.id, 'data-category': cat.id, role:'region', 'aria-labelledby': `${cat.id}-title`});
+        const head = el('div', { class:'card-head', style:'padding:16px' }, [
+          el('div', {}, [
+            el('h2', { id:`${cat.id}-title`, class:'title' }, [cat.label]),
+            el('div', { class:'meta' }, [`${cat.items.length} topic${cat.items.length>1?'s':''}`])
+          ])
+        ]);
+        section.append(head);
+
+        cat.items.forEach(item => {
+          const d = el('details', { id: item.id, 'data-search-text': (item.title + ' ' + item.body).toLowerCase() });
+          const sum = el('summary', {}, [
+            el('span', { class:'chev', 'aria-hidden':'true' }, ['▶']),
+            el('span', { class:'summary-title' }, [item.title]),
+            el('span', { class:'meta' }, [ item.updated ? `Updated ${formatDate(item.updated)}` : '' ])
+          ]);
+          const content = el('div', { class:'content', role:'region', 'aria-label': item.title });
+          content.innerHTML = `<p>${item.body}</p>`;
+          d.append(sum, content);
+          section.append(d);
+        });
+
+        grid.append(section);
+      });
+
+      const last = document.querySelector('[data-last-updated]');
+      const latest = CONFIG.categories.flatMap(c => c.items.map(i => i.updated)).filter(Boolean).sort().pop();
+      if (last && latest) last.textContent = formatDate(latest);
+    }
+
+    function buildTOC() {
+      const toc = qs('#toc');
+      toc.innerHTML = '';
+      toc.append(el('h3', {}, ['On this page']));
+
+      const visibleSections = Array.from(document.querySelectorAll('[data-category]')).filter(sec => sec.style.display !== 'none');
+      for (const sec of visibleSections) {
+        const cat = CONFIG.categories.find(c => c.id === sec.dataset.category);
+        toc.append(el('a', { href: `#${cat.id}` }, [cat.label]));
+        const items = sec.querySelectorAll('details');
+        items.forEach(d => toc.append(el('a', { style:'margin-left:10px', href: `#${d.id}` }, [d.querySelector('.summary-title').textContent])));
+      }
+    }
+
+    function setupSearch() {
+      const input = qs('#search');
+      const onSearch = () => {
+        const q = input.value.trim().toLowerCase();
+        for (const det of document.querySelectorAll('details')) {
+          const txt = det.dataset.searchText || '';
+          if (!q) { det.style.display = ''; continue; }
+          det.style.display = txt.includes(q) ? '' : 'none';
+        }
+        buildTOC();
+      };
+      input.addEventListener('input', onSearch);
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+          e.preventDefault(); input.focus();
+        }
+      });
+    }
+
+    function setupExpandCollapse() {
+      qs('#expandAllBtn').addEventListener('click', () => document.querySelectorAll('details').forEach(d => d.open = true));
+      qs('#collapseAllBtn').addEventListener('click', () => document.querySelectorAll('details').forEach(d => d.open = false));
+    }
+
+    function setupPrint() { qs('#printBtn').addEventListener('click', () => window.print()); }
+
+    function setupTheme() {
+      const btn = qs('#toggleThemeBtn');
+      const params = new URLSearchParams(location.search);
+      const force = params.get('theme');
+      const hideHeader = params.get('hideHeader');
+      if (hideHeader) document.querySelector('header').style.display = 'none';
+
+      if (force) { document.documentElement.dataset.theme = force; }
+      const apply = () => {
+        const m = document.documentElement.dataset.theme;
+        btn.setAttribute('aria-pressed', m === 'dark');
+      };
+      btn.addEventListener('click', () => {
+        const cur = document.documentElement.dataset.theme;
+        document.documentElement.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+        apply();
+      });
+      apply();
+    }
+
+    function openHash() {
+      const id = decodeURIComponent(location.hash.replace('#',''));
+      if (!id) return;
+      const elx = document.getElementById(id);
+      if (elx && elx.tagName.toLowerCase() === 'details') elx.open = true;
+    }
+
+    function init() {
+      mountResources(qs('.actions'));
+      buildPolicies();
+      mountFilters();
+      buildTOC();
+      setupSearch();
+      setupExpandCollapse();
+      setupPrint();
+      setupTheme();
+      openHash();
+      window.addEventListener('hashchange', openHash);
+    }
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
