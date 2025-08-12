@@ -3,451 +3,524 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Corporate Expense Policies</title>
-  <meta name="description" content="Carenet corporate expense policy hub with search, categories, and print-ready view." />
+  <title>Carenet Finance Policies</title>
+  <meta name="description" content="Carenet Finance Policies – Professional Rewrite (August 12, 2025)" />
+  <!--
+    EMBED NOTES (for SharePoint):
+    1) Host this file on GitHub Pages (repo → Settings → Pages → Deploy from branch → /root).
+    2) In SharePoint, use an Embed web part with this iframe (update org + path):
+       <iframe src="https://YOUR-ORG.github.io/YOUR-REPO/index.html" width="100%" height="1400" style="border:none" loading="lazy"></iframe>
+    3) If SharePoint blocks it, ask your admin to allow the github.io domain in HTML Field Security.
+  -->
   <style>
     :root {
-      --bg: #ffffff;
-      --text: #111827;
-      --muted: #6b7280;
-      --card: #f8fafc;
-      --accent: #0ea5e9;
-      --accent-2: #0369a1;
-      --ring: rgba(14,165,233,.35);
+      --brand-primary: #DD1533; /* red */
+      --brand-ink: #343e47;     /* slate */
+      --brand-paper: #F9F9F9;   /* off white */
+      --ink-2: #4c5963;
+      --ink-3: #6b7780;
       --border: #e5e7eb;
-      --code-bg: #0f172a;
-      --code-fg: #e2e8f0;
+      --surface: #ffffff;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b1220;
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --card: #0f172a;
-        --accent: #38bdf8;
-        --accent-2: #7dd3fc;
-        --ring: rgba(56,189,248,.35);
-        --border: #1f2937;
-        --code-bg: #111827;
-        --code-fg: #d1d5db;
-      }
+    /* Dark mode vars */
+    html.dark {
+      --brand-paper: #0f1418;
+      --surface: #12181d;
+      --brand-ink: #e6e6e6;
+      --ink-2: #c7d0d8;
+      --ink-3: #9aa6af;
+      --border: #2a333a;
     }
-    html, body {height: 100%}
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
-    .container {max-width: 1100px; margin: 0 auto; padding: 24px;}
-    header { position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(140%) blur(6px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom: 1px solid var(--border); }
-    .header-inner {display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 24px; max-width: 1100px; margin: 0 auto;}
-    h1 {font-size: clamp(1.4rem, 1.2rem + 1.2vw, 2.2rem); margin: 0; text-wrap: balance;}
-    .actions {display: flex; gap: 8px; align-items: center;}
-    .btn {border: 1px solid var(--border); background: var(--card); color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600;}
-    .btn:focus, .btn:hover {outline: none; box-shadow: 0 0 0 3px var(--ring); border-color: var(--accent)}
-    .btn.primary {background: var(--accent); border-color: var(--accent); color: white}
-    .btn.link {background: transparent; border-color: transparent; color: var(--accent);}
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; padding: 0; color: var(--brand-ink); background: var(--brand-paper);
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .container { display: grid; grid-template-columns: 280px 1fr; gap: 28px; max-width: 1200px; margin: 0 auto; padding: 24px; }
+    header.site {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(120%) blur(8px);
+      background: color-mix(in oklab, var(--brand-paper) 92%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display:flex; align-items:center; gap:16px; }
+    .badge { font-weight: 600; color: var(--surface); background: var(--brand-primary); border-radius: 999px; padding: 4px 10px; font-size: 12px; letter-spacing: .3px; }
+    .title { font-weight: 700; font-size: 18px; }
+    .spacer { flex:1; }
+    .btn { border:1px solid var(--border); background: var(--surface); color: var(--brand-ink); padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+    .btn:hover { border-color: color-mix(in oklab, var(--brand-primary) 30%, var(--border)); }
+    .btn-primary { background: var(--brand-primary); color:#fff; border-color: color-mix(in oklab, var(--brand-primary) 90%, #000 0%); }
 
-    .toolbar {display: grid; grid-template-columns: 1fr auto; gap: 12px; margin: 18px 0 8px}
-    .search { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); background: var(--card); padding: 10px 12px; border-radius: 12px; }
-    .search input {flex: 1; font-size: 16px; border: none; outline: none; background: transparent; color: var(--text)}
-    .pill {padding: 6px 10px; border-radius: 999px; border:1px solid var(--border); background: var(--card); cursor: pointer; font-size: 14px}
-    .pill.active {border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring)}
+    nav.toc { position: sticky; top: 64px; align-self: start; background: var(--surface); border:1px solid var(--border); border-radius: 16px; padding: 16px; max-height: calc(100dvh - 96px); overflow: auto; }
+    nav.toc h2 { margin: 0 0 8px; font-size: 14px; letter-spacing:.2px; color: var(--ink-2); }
+    nav.toc a { display:block; padding: 6px 8px; margin: 2px 0; border-radius: 8px; text-decoration: none; color: var(--ink-2); font-size: 14px; }
+    nav.toc a:hover { background: color-mix(in oklab, var(--brand-primary) 12%, var(--surface)); color: var(--brand-ink); }
+    nav.toc a.active { background: color-mix(in oklab, var(--brand-primary) 18%, var(--surface)); color: var(--brand-ink); font-weight: 600; }
 
-    .grid {display:grid; grid-template-columns: 1fr; gap: 14px}
-    @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+    main { background: var(--surface); border:1px solid var(--border); border-radius: 16px; padding: 24px; }
+    h1 { font-size: 28px; margin: 0 0 8px; }
+    .meta { color: var(--ink-3); font-size: 14px; margin-bottom: 24px; }
+    section.policy { padding-top: 64px; margin-top: -64px; /* anchor offset for sticky header */ }
+    h2 { font-size: 22px; margin: 28px 0 8px; }
+    h3 { font-size: 18px; margin: 22px 0 8px; color: var(--ink-2); }
+    ul, ol { padding-left: 20px; }
+    code.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px; background: color-mix(in oklab, var(--brand-primary) 8%, var(--surface)); padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; }
+    .callout { border-left: 4px solid var(--brand-primary); background: color-mix(in oklab, var(--brand-primary) 6%, var(--surface)); padding: 12px 14px; border-radius: 8px; }
+    .grid-two { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .footer { color: var(--ink-3); font-size: 14px; margin-top: 32px; padding-top: 16px; border-top: 1px dashed var(--border); }
 
-    .card {border: 1px solid var(--border); background: var(--card); border-radius: 14px; overflow: clip}
-    .card header {position: relative; top: unset; backdrop-filter: none; background: transparent; border: none}
-    .card .title {font-weight: 700; font-size: 1.05rem; margin: 0}
-    .meta {font-size: 12px; color: var(--muted)}
+    .search { display:flex; gap:8px; margin: 4px 0 12px; }
+    .search input { flex:1; padding: 8px 10px; border-radius: 10px; border:1px solid var(--border); background: var(--surface); color: var(--brand-ink); }
+    .result-count { font-size: 12px; color: var(--ink-3); margin-left: 6px; }
+    mark { background: color-mix(in oklab, var(--brand-primary) 28%, #fff); color: #111; border-radius: 4px; padding: 0 2px; }
 
-    details {border-top: 1px dashed var(--border)}
-    details[open] summary .chev {transform: rotate(90deg)}
-    summary {list-style: none; padding: 16px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: start; cursor: pointer;}
-    summary::-webkit-details-marker {display: none}
-    .chev {transition: transform .2s ease}
-    .summary-title {font-weight: 600}
-    .content {padding: 0 16px 16px; color: var(--text); line-height: 1.55}
-    .content p {margin: 10px 0}
-    .content a {color: var(--accent)}
+    /* Mobile */
+    @media (max-width: 960px) {
+      .container { grid-template-columns: 1fr; }
+      nav.toc { position: relative; top: 0; max-height: none; }
+    }
 
-    .toc { position: sticky; top: 76px; border: 1px solid var(--border); background: var(--card); border-radius: 12px; padding: 12px; }
-    .toc h3 { margin: 0 0 8px; font-size: .95rem }
-    .toc a { display:block; text-decoration: none; color: var(--text); padding: 6px 8px; border-radius: 8px; border: 1px solid transparent}
-    .toc a:hover, .toc a:focus { border-color: var(--border); outline: none }
-
-    .note {font-size: 14px; color: var(--muted)}
-    .kbd {font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .9em; padding: 2px 6px; border-radius: 6px; border:1px solid var(--border); background: var(--bg);}
-
-    .footer {text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0}
-
+    /* Print Styles */
     @media print {
-      header, .toolbar, .toc, .footer, .actions { display: none !important }
-      body { background: #fff; color: #000 }
-      .container { max-width: unset; padding: 0 }
-      .card { border: none; page-break-inside: avoid }
-      details[open] summary { border-bottom: 1px solid #ddd }
+      header.site, .search, .btn, nav.toc { display: none !important; }
+      main { border: none; }
+      body { background: #fff; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: 11px; color: #666; }
     }
   </style>
 </head>
 <body>
-  <header role="banner">
+  <header class="site">
     <div class="header-inner">
-      <h1 id="page-title">Corporate Expense Policies</h1>
-      <div class="actions">
-        <button class="btn" id="toggleThemeBtn" aria-pressed="false" title="Toggle dark mode">Toggle Theme</button>
-        <button class="btn" id="expandAllBtn">Expand All</button>
-        <button class="btn" id="collapseAllBtn">Collapse All</button>
-        <button class="btn primary" id="printBtn">Print / Save PDF</button>
-      </div>
+      <span class="badge">Carenet Confidential</span>
+      <div class="title">Finance Policies</div>
+      <div class="spacer"></div>
+      <button class="btn" id="darkModeBtn" aria-pressed="false" title="Toggle dark mode">Toggle theme</button>
+      <button class="btn" onclick="window.print()" title="Print or Save as PDF">Print</button>
     </div>
   </header>
 
-  <main class="container" id="app" role="main">
-    <div class="toolbar" aria-label="Policy filters and search">
-      <label class="search" aria-label="Search policies">
-        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-        <input id="search" type="search" placeholder="Search policy, e.g., receipts, per diem, limits" autocomplete="off" />
-        <kbd class="kbd" title="Keyboard shortcut">/</kbd>
-      </label>
-      <div class="filters" role="group" aria-label="Category filters" id="filterPills"></div>
-    </div>
+  <div class="container">
+    <nav class="toc" aria-label="On this page">
+      <h2>Contents</h2>
+      <div class="search">
+        <input id="search" type="search" placeholder="Search policies…" aria-label="Search policies" />
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <a href="#overview">Overview</a>
+      <a href="#fn08">1) Corporate Credit Card (FN08)</a>
+      <a href="#fn02">2) U.S. Travel & Expenses (FN02)</a>
+      <a href="#fn07">3) Gift Support Form (FN07)</a>
+      <a href="#fn04">4) Gym/Fitness Reimbursement (FN04)</a>
+      <a href="#fn10">5) Philippines Travel & Expenses (FN10)</a>
+    </nav>
 
-    <div class="grid">
-      <section aria-label="Policy content" id="policyGrid"></section>
-      <aside class="toc" aria-label="On this page" id="toc"></aside>
-    </div>
+    <main id="content">
+      <section class="policy" id="overview">
+        <h1>Carenet Finance Policies – Professional Rewrite</h1>
+        <p class="meta">Effective date: <strong>August 12, 2025</strong> · Prepared by: <strong>Finance</strong> · Classification: <strong>Carenet Confidential &amp; Proprietary</strong></p>
+        <div class="callout"><strong>Defined Term.</strong> <em>Team Member</em> (capitalized) refers to any Carenet employee.</div>
+      </section>
 
-    <p class="note" id="lastUpdatedNote">Last updated: <span data-last-updated></span></p>
+      <!-- ===== FN08 ===== -->
+      <section class="policy" id="fn08">
+        <h2>1) Corporate Credit Card Policy (FN08)</h2>
+        <h3>Purpose</h3>
+        <p>Set clear expectations for the issuance, use, safeguarding, and monitoring of corporate credit cards.</p>
+        <h3>Scope</h3>
+        <p>All Team Members who are issued a company card or temporarily sign out a card.</p>
+        <h3>Policy Statement</h3>
+        <p>Corporate credit cards are provided for authorized business expenses only. Cardholders and anyone signing out a card are responsible for compliant use, timely documentation, and card security. Carenet pays approved balances in full each month.</p>
+        <h3>Roles &amp; Responsibilities</h3>
+        <ul>
+          <li><strong>Cardholder / Borrower:</strong> Uses the card only for approved business expenses; secures the card; submits receipts and expense reports on time; promptly reports lost/stolen cards; reviews monthly statements.</li>
+          <li><strong>Supervisors:</strong> Ensure compliance and timely approvals.</li>
+          <li><strong>Finance Department (Plan Administrator):</strong> Administers the program, audits expenses, handles issuance/limits, and may suspend or cancel privileges.</li>
+        </ul>
+        <h3>Eligibility &amp; Approval</h3>
+        <ul>
+          <li>Corporate cards may be issued to full‑time Team Members who frequently travel, purchase minor goods/services, or otherwise incur recurring business expenses.</li>
+          <li>Eligible Team Members request a card through the <strong>CFO / Plan Administrator</strong>. Cards must be signed immediately upon receipt.</li>
+        </ul>
+        <h3>Temporary Card Sign‑Out</h3>
+        <p>Team Members not issued a card may sign out a card from Finance for a specific, approved purchase. Cards must be signed out <strong>for each transaction</strong> and returned promptly. Storing card information for later use or using a card without signing it out is prohibited and may result in loss of privilege or other discipline.</p>
+        <h3>Permitted Use &amp; Security</h3>
+        <ul>
+          <li><strong>Business use only.</strong> Personal charges are prohibited.</li>
+          <li>Keep spend within approved budgets and limits.</li>
+          <li>Do not transfer a card to others or share card credentials.</li>
+          <li>Do not save card numbers in browsers, vendor accounts, or mobile apps.</li>
+          <li>Use reputable sites with encryption for online transactions.</li>
+          <li>Report lost or stolen cards <strong>immediately</strong> to American Express and Finance.</li>
+        </ul>
+        <h3>Receipts &amp; Expense Reporting</h3>
+        <ul>
+          <li>Maintain <strong>itemized</strong> receipts for every transaction. Include: date, vendor, description, total, business purpose, and attendees (with titles/affiliation) when applicable.</li>
+          <li>Upload receipts and submit expense reports through <strong>Emburse Professional</strong> as expenses are incurred, or by the required monthly deadline.</li>
+          <li>Failure to provide adequate documentation may result in payroll deduction, denial of reimbursement, and/or discipline.</li>
+        </ul>
+        <h3>Monthly Review &amp; Charge Verification</h3>
+        <p>Finance downloads charges and sends card activity to cardholders monthly. Cardholders must review promptly. Reminders will be sent if an expense report is not received <strong>within 2–3 business days</strong> of notification. Repeated non‑compliance may result in card cancellation and other actions.</p>
+        <h3>Disputes</h3>
+        <p>Cardholders are responsible for initiating and tracking disputes with American Express and notifying Finance/CFO. Ensure proper credits are received on subsequent statements.</p>
+        <h3>Violations (Illustrative)</h3>
+        <ul>
+          <li>Cash advances or cash‑like transactions.</li>
+          <li>Personal purchases.</li>
+          <li>Allowing unauthorized users to transact.</li>
+          <li>Failing to return a signed‑out card; leaving a card unattended.</li>
+          <li>Not submitting receipts/expense reports by deadlines.</li>
+          <li>Storing card numbers on devices or websites.</li>
+        </ul>
+        <p><strong>Consequences:</strong> Disciplinary action up to and including termination; recovery of improper charges; suspension/cancellation of privileges.</p>
+        <h3>Cancellation / Separation</h3>
+        <p>Upon resignation or termination, return the card to Finance immediately and reconcile all outstanding transactions. Departing cardholders are responsible for settling the account prior to departure.</p>
+        <h3>Metadata</h3>
+        <ul>
+          <li><strong>Policy Name:</strong> Corporate Credit Card Policy</li>
+          <li><strong>Policy No.:</strong> FN08</li>
+          <li><strong>Category:</strong> Finance</li>
+          <li><strong>Applies to:</strong> All Team Members</li>
+          <li><strong>Original Effective Date:</strong> 02/01/2018</li>
+          <li><strong>Last Reviewed:</strong> 02/06/2025</li>
+          <li><strong>Annual Review Month:</strong> February</li>
+          <li><strong>Approval Authority:</strong> Chief Financial Officer</li>
+          <li><strong>References:</strong> Emburse Professional, Team Member Handbook</li>
+        </ul>
+      </section>
 
-    <section class="footer">
-      <p>Questions? Contact <a href="mailto:finance@carenethealthcare.com">finance@carenethealthcare.com</a>.</p>
-    </section>
-  </main>
+      <!-- ===== FN02 ===== -->
+      <section class="policy" id="fn02">
+        <h2>2) Travel, Business Expense &amp; Expense Reports – U.S. (FN02)</h2>
+        <h3>Purpose</h3>
+        <p>Ensure business travel and general business expenses are reasonable, necessary, and cost‑effective.</p>
+        <h3>Scope</h3>
+        <p>All U.S.‑based Team Members incurring business travel or general business expenses.</p>
+        <h3>Policy Statement</h3>
+        <p>Use Carenet’s travel software for booking. Charge expenses to a corporate card whenever possible. If a corporate card cannot be used, properly documented, Finance‑approved expenses will be reimbursed.</p>
+        <h3>Pre‑Travel Approval</h3>
+        <ul>
+          <li>Submit a <strong>Travel Request Form</strong> at least <strong>10 business days</strong> before anticipated travel.</li>
+          <li>Obtain <strong>Department VP</strong> approval <strong>before</strong> booking.</li>
+          <li>Provide the approved form to Finance (for notification and any approved advances).</li>
+        </ul>
+        <h3>Booking Standards</h3>
+        <ul>
+          <li><strong>Air:</strong> Book the <strong>lowest available economy</strong> fare; no upgrades, early‑boarding, or optional fees without pre‑approval and justification.</li>
+          <li><strong>Hotel / Car:</strong> Book via company travel software unless a demonstrably lower rate is obtained elsewhere (e.g., bona fide loyalty rates). Notify Leadership and Finance of exceptions.</li>
+          <li>Travelers must make changes promptly and within policy.</li>
+        </ul>
+        <h3>Documentation &amp; Submission</h3>
+        <ul>
+          <li><strong>In Travel Software:</strong> Submit an expense report and upload <strong>itemized</strong> receipts for each transaction (date, total, category, business purpose, attendees when applicable). Airline <strong>passenger receipts</strong> (not itineraries) are required.</li>
+          <li><strong>Outside Travel Software:</strong> Submit an expense report with itemized receipts and the approved Travel Request Form. Indicate method of payment for each item.</li>
+          <li><strong>Deadlines:</strong>
+            <ul>
+              <li>Credit‑card expenses: reimbursed after the statement cycle closes.</li>
+              <li>Out‑of‑pocket expenses: reimbursed on the next payroll if submitted before payroll processing (usually the Friday prior to pay date).</li>
+              <li>Reports <strong>&gt;30 days</strong> old require Finance approval and may be denied.</li>
+            </ul>
+          </li>
+          <li>By submitting/approving an expense report, the Team Member and approving Leader attest to accuracy and completeness and authorize recovery of any overpayment.</li>
+        </ul>
+        <h3>Allowable Expenses (Illustrative)</h3>
+        <ul>
+          <li>Lowest‑fare air or rail; airport transportation.</li>
+          <li>Lodging; internet when necessary for business.</li>
+          <li>Meals (see limits).</li>
+          <li>Limited gratuities within tipping guidance.</li>
+          <li>Laundry/dry cleaning when travel exceeds <strong>5 consecutive nights</strong>.</li>
+          <li>Mileage at current IRS rate when a personal vehicle is used <strong>for out‑of‑town travel</strong>.</li>
+          <li>Rental cars when necessary for out‑of‑town travel.</li>
+          <li>Long‑term parking; tolls.</li>
+        </ul>
+        <h3>Non‑Reimbursable (Illustrative)</h3>
+        <ul>
+          <li>Upgrades/optional airline fees</li>
+          <li>In‑room entertainment</li>
+          <li>Laundry for trips of ≤5 nights</li>
+          <li>Books/magazines</li>
+          <li>Alcohol (see <strong>Alcohol</strong> below)</li>
+          <li>Toiletries</li>
+          <li>Apparel</li>
+          <li>Travel insurance</li>
+          <li>Fines/penalties</li>
+          <li>Vehicle maintenance/repairs</li>
+          <li>Personal property loss</li>
+          <li>Excess baggage (except business materials)</li>
+          <li>Financial/card fees</li>
+          <li>Child care</li>
+          <li>Valet/concierge</li>
+          <li>Minibar</li>
+          <li>Personal phone charges beyond limits</li>
+          <li>Briefcases and similar personal items</li>
+          <li>Health club/sauna</li>
+          <li>Non‑business transportation</li>
+          <li>Personal services</li>
+          <li><strong>Short‑term airport parking</strong> for overnight/longer trips.</li>
+        </ul>
+        <h3>Meals &amp; Gratuities</h3>
+        <ul>
+          <li>Reimbursed at <strong>actuals</strong>, not per diem.</li>
+          <li>Combined daily limit (including tips): <strong>$60/day</strong>.</li>
+          <li>Partial‑day guidance: <strong>Breakfast $10 / Lunch $20 / Dinner $30</strong>.</li>
+          <li>Acceptable tip range: <strong>up to 15%</strong>. Tips above this range may be limited.</li>
+          <li>Use provided meals at events; do not request reimbursement for meals already included in registration fees.</li>
+        </ul>
+        <h3>Alcohol</h3>
+        <p>Not reimbursable. Limited, pre‑approved exceptions may apply for bona fide client/vendor business. See Team Member Handbook.</p>
+        <h3>Entertainment</h3>
+        <p>Client/prospect‑related only. Department VPs designate who may incur entertainment expenses and under what circumstances.</p>
+        <h3>Lodging</h3>
+        <p>Reimbursed when an overnight stay is required. Select economical options that support the business purpose.</p>
+        <h3>Ground Transportation</h3>
+        <p>Use the most economical option that meets the business need. <strong>Rideshare and shuttle</strong> options are preferred for short/limited needs. Taxis only when they are the best choice. If choosing rideshare to the airport instead of parking, the cost should not exceed long‑term parking.</p>
+        <h3>Parking</h3>
+        <p>Use <strong>long‑term</strong> airport parking. If short‑term parking is used, reimbursement may be limited to the prevailing long‑term daily rate (e.g., SAT up to $16/day as of 07/2023).</p>
+        <h3>Personal Automobile</h3>
+        <p>Reimbursed at the IRS mileage rate for business miles. Mileage to/from the airport is reimbursed only to the extent it <strong>exceeds</strong> the normal commute. Maintain a contemporaneous mileage log (date, origin/destination, business purpose). Vehicle operating costs are deemed covered by the mileage rate and are not reimbursed separately. Proof of auto liability insurance is required.</p>
+        <h3>Telephone</h3>
+        <p>Hotel long‑distance charges are generally <strong>not</strong> allowed.</p>
+        <h3>Laundry &amp; Dry Cleaning</h3>
+        <p>Reimbursable when travel exceeds <strong>5 consecutive nights</strong> (or if an assignment is unexpectedly extended and documented). Applies only while traveling—not after returning home.</p>
+        <h3>Cash Advances</h3>
+        <p>Available for infrequent travelers upon request on the Travel Request Form. Only one outstanding advance at a time. Any unused/unsupported amount is recovered via payroll deduction.</p>
+        <h3>Work‑From‑Home (WFH) Expenses</h3>
+        <p>No reimbursement is offered where no incremental cost is incurred. In states that require reimbursement of necessary business expenses (<strong>California, Iowa, Montana, Massachusetts, New York, Illinois</strong>), submit a monthly expense report in <strong>Emburse Professional</strong> with the service bill showing the service address matching the employee’s address. For mixed personal/business services (e.g., home internet), expense only the business‑use percentage, <strong>capped at 50%</strong> of the monthly charge. Submit within <strong>30 days</strong> of billing.</p>
+        <h3>Staff Appreciation</h3>
+        <p>Obtain <strong>VP approval</strong> before incurring Staff Appreciation expenses. VPs must manage to budget; unapproved spend may not be reimbursed.</p>
+        <h3>Spouse/Guest Travel</h3>
+        <p>Permitted only with prior approval. Any incremental costs (hotel, transportation, meals, etc.) are the Team Member’s responsibility.</p>
+        <h3>Travel to Corporate Offices</h3>
+        <p>Limit to essential trips when virtual options are not feasible. If corporate office staff dine with traveling Team Members, charge those meals to the <strong>Staff Appreciation</strong> budget.</p>
+        <h3>Metadata</h3>
+        <ul>
+          <li><strong>Policy Name:</strong> Travel, Business Expense &amp; Expense Reports (U.S.)</li>
+          <li><strong>Policy No.:</strong> FN02</li>
+          <li><strong>Category:</strong> Finance</li>
+          <li><strong>Applies to:</strong> All Team Members</li>
+          <li><strong>Original Effective Date:</strong> 08/22/2007</li>
+          <li><strong>Last Reviewed:</strong> 07/03/2025</li>
+          <li><strong>Annual Review Month:</strong> July</li>
+          <li><strong>Approval Authority:</strong> Chief Financial Officer</li>
+        </ul>
+      </section>
+
+      <!-- ===== FN07 ===== -->
+      <section class="policy" id="fn07">
+        <h2>3) Gift Support Form Procedure (FN07)</h2>
+        <h3>Purpose</h3>
+        <p>Ensure timely, accurate recording and reporting of gifts/gift cards purchased for Team Members, whether via corporate card or reimbursable funds.</p>
+        <h3>Policy Statement</h3>
+        <p>All gifts and gift cards must be documented and submitted to Payroll for reporting. The company will remit appropriate taxes. Finance uses gift records to validate purchases/reimbursements, ensure accurate reporting, and mitigate fraud.</p>
+        <h3>Required Documentation</h3>
+        <ul>
+          <li><strong>Gift Support Form</strong> (Excel) listing recipient name, employee ID, salary/hourly status, and amount; recipient signatures (or Director validation when remote).</li>
+          <li><strong>Receipt</strong> for the purchase.</li>
+          <li><strong>Approved expense report</strong> (or <strong>Emburse Professional</strong> transaction reference for corporate card purchases).</li>
+        </ul>
+        <h3>Procedure – Expected (Gifts purchased and distributed in the same month)</h3>
+        <ol>
+          <li>At purchase: scan and email to <strong>Payroll</strong> (a) original receipt, (b) approved expense report/Emburse Professional reference, (c) completed Gift Support Form.</li>
+          <li>Submit the full packet to <strong>Finance</strong> (corporate card or personal reimbursement, as applicable).</li>
+        </ol>
+        <h3>Procedure – Alternate (Gifts distributed over multiple months)</h3>
+        <ol>
+          <li>At purchase: attach a <strong>copy</strong> of the receipt to the Gift Support Form for tracking; submit the <strong>original</strong> receipt with the expense report/Emburse Professional reference to Finance.</li>
+          <li>As gifts are distributed: record each distribution and obtain signatures.</li>
+          <li>Monthly until all gifts from that receipt are distributed: send the updated Gift Support Form to <strong>Payroll</strong> (with the receipt copy) showing all distributions made that month.</li>
+        </ol>
+        <h3>Metadata</h3>
+        <ul>
+          <li><strong>Policy Name:</strong> Gift Support Form Procedure</li>
+          <li><strong>Policy No.:</strong> FN07</li>
+          <li><strong>Category:</strong> Finance</li>
+          <li><strong>Applies to:</strong> All Team Members</li>
+          <li><strong>Original Effective Date:</strong> 01/04/2018</li>
+          <li><strong>Last Reviewed:</strong> 04/03/2025</li>
+          <li><strong>Annual Review Month:</strong> April</li>
+          <li><strong>Approval Authority:</strong> Chief Financial Officer</li>
+          <li><strong>References:</strong> Expense Report Form; Gift Expense Report Forms</li>
+        </ul>
+      </section>
+
+      <!-- ===== FN04 ===== -->
+      <section class="policy" id="fn04">
+        <h2>4) Gym/Fitness Program Reimbursement Policy (FN04)</h2>
+        <h3>Purpose</h3>
+        <p>Encourage wellness by standardizing reimbursement for eligible fitness programs.</p>
+        <h3>Policy Statement</h3>
+        <p>Carenet reimburses up to <strong>$27.00 per month</strong> for an eligible gym/fitness program when the Team Member <strong>attends at least 10 days</strong> in the month. Eligible programs must provide verifiable utilization reports (date/time‑stamped), not simple notes.</p>
+        <h3>Eligibility</h3>
+        <ul>
+          <li>Available after <strong>30 days</strong> of employment.</li>
+          <li>Recreational activities without attendance reporting do not qualify.</li>
+        </ul>
+        <h3>Process</h3>
+        <ul>
+          <li><strong>Gold’s Gym (payroll‑deducted):</strong> No reimbursement request needed; Gold’s provides utilization reports directly.</li>
+          <li><strong>All other programs:</strong> Submit a <strong>Gym Expense Form</strong> via <strong>Jira (Payroll)</strong> within <strong>30 days</strong> after month‑end with (a) receipt showing monthly fee and (b) utilization/progress report. Calculations are generally processed within <strong>7 business days</strong>; reimbursement is paid in the next payroll following processing.</li>
+        </ul>
+        <h3>Tax Treatment</h3>
+        <p>Reimbursed amounts are taxable income (FICA/Medicare/federal/state/local as applicable).</p>
+        <h3>Metadata</h3>
+        <ul>
+          <li><strong>Policy Name:</strong> Gym/Fitness Program Reimbursement Policy</li>
+          <li><strong>Policy No.:</strong> FN04</li>
+          <li><strong>Category:</strong> Finance</li>
+          <li><strong>Applies to:</strong> All Team Members</li>
+          <li><strong>Original Effective Date:</strong> 04/01/2012</li>
+          <li><strong>Last Reviewed:</strong> 01/09/2025</li>
+          <li><strong>Annual Review Month:</strong> January</li>
+          <li><strong>Approval Authority:</strong> VP, People Services</li>
+        </ul>
+      </section>
+
+      <!-- ===== FN10 ===== -->
+      <section class="policy" id="fn10">
+        <h2>5) Philippines (PHL) Travel, Business Expense &amp; Expense Reports (FN10)</h2>
+        <h3>Purpose</h3>
+        <p>Provide PHL‑specific travel and expense guidance aligned with Carenet standards and local requirements.</p>
+        <h3>Scope</h3>
+        <p>All Team Members based in the Philippines or traveling from the Philippines on Carenet business.</p>
+        <h3>Policy Statement</h3>
+        <p>Use company travel software for booking. Charge expenses to a corporate card whenever possible. Properly documented, Finance‑approved expenses are reimbursed per this policy.</p>
+        <h3>Approvals &amp; Lead Times</h3>
+        <ul>
+          <li><strong>Local PHL travel:</strong> Submit <strong>Travel Request Form</strong> and <strong>Cash Advance Form</strong> <strong>15–30 days</strong> before travel.</li>
+          <li><strong>U.S. travel/visas:</strong> Submit <strong>2–3 months</strong> in advance.</li>
+        </ul>
+        <h3>Booking Standards</h3>
+        <ul>
+          <li><strong>Air:</strong> Lowest available economy; no upgrades/early‑boarding/optional fees without pre‑approval and justification.</li>
+          <li><strong>Hotel/Car:</strong> Book via company travel software unless demonstrably lower rates are available elsewhere (notify Leadership and Finance).</li>
+          <li>Changes must be made promptly and within policy.</li>
+        </ul>
+        <h3>Documentation, Submission &amp; Timing</h3>
+        <ul>
+          <li>Submit expense reports <strong>no later than 5 business days</strong> after travel ends.</li>
+          <li><strong>In Travel Software:</strong> Upload itemized receipts for each transaction (date, total, category, purpose, attendees). Passenger receipts required.</li>
+          <li><strong>Outside Travel Software:</strong> Submit itemized receipts, approved Travel Request Form, and method of payment for each item.</li>
+          <li><strong>Reimbursement timing:</strong> Same as U.S. policy (after statement close for card charges; next payroll if submitted before payroll processing).</li>
+          <li><strong>Cash advances:</strong> If receipts total less than the advance, return the difference via <strong>wire transfer</strong>. Submission/approval attests to accuracy and authorizes recovery of overpayments.</li>
+        </ul>
+        <h3>Allowable Expenses (Illustrative)</h3>
+        <p>Lowest‑fare air/rail; airport transport; lodging; internet when necessary; meals (see limits); limited gratuities; laundry/dry cleaning for trips &gt;5 nights; rideshare as necessary; rental cars <strong>only with one‑off approval</strong>.</p>
+        <h3>Non‑Reimbursable (Illustrative)</h3>
+        <p>Same as U.S. list, including upgrades/optional airline fees; entertainment; apparel; fines/penalties; financial/card fees; personal/concierge services; minibar; short‑term airport parking, etc.</p>
+        <h3>Meals &amp; Gratuities (PHL)</h3>
+        <ul>
+          <li>Reimbursed at <strong>actuals</strong>. Not a per diem.</li>
+          <li><strong>Local PHL travel:</strong> daily combined limit <strong>₱350</strong> (including tips).</li>
+          <li><strong>U.S. travel:</strong> daily combined limit <strong>$65 USD</strong> (including tips).</li>
+          <li>Partial‑day guidance: <strong>Breakfast $10 / Lunch $20 / Dinner $35</strong> (USD).</li>
+          <li>Acceptable tips: <strong>up to 15%</strong>; excess may be limited.</li>
+          <li>Use provided meals at events; do not request reimbursement for meals already included.</li>
+        </ul>
+        <h3>Lodging</h3>
+        <p>Reimbursable when an overnight stay is required. For Company events in the U.S., <strong>use the leadership‑designated hotel block</strong>.</p>
+        <h3>Ground Transportation</h3>
+        <p>Rideshare is preferred for short/limited needs (<strong>Uber Comfort</strong> or <strong>Uber XL</strong> for groups up to 6). Rental cars require one‑off approval. Personal/leisure transportation is not reimbursable.</p>
+        <h3>Air Travel – Philippine Travel Tax (TIEZA)</h3>
+        <p>The <strong>Philippine Travel Tax</strong> applies to outbound international trips under <strong>PD 1183</strong>.<br>
+        <strong>Payment options:</strong></p>
+        <ul>
+          <li>If the ticket is issued outside the Philippines: pay at the <strong>TIEZA Travel Tax</strong> counter at the airport.</li>
+          <li>If issued in the Philippines: pay via airline ticket office/travel agency.</li>
+          <li>If purchased online: either pay during booking (adult passengers only) or at the airport <strong>TIEZA</strong> counter before check‑in.</li>
+        </ul>
+        <p><strong>Requirement:</strong> Submit the travel‑tax receipt with your expense report.</p>
+        <h3>Telephone</h3>
+        <p>Use <strong>WhatsApp</strong> where possible. Hotel long‑distance charges are not allowed.</p>
+        <h3>Laundry &amp; Dry Cleaning</h3>
+        <p>Reimbursable when travel exceeds <strong>5 consecutive nights</strong> (see U.S. policy for details).</p>
+        <h3>Staff Appreciation</h3>
+        <p>Requires <strong>VP approval</strong> in advance. Unapproved spend may not be reimbursed.</p>
+        <h3>Spouse/Guest Travel</h3>
+        <p>Permitted only with prior approval. Any incremental costs are the Team Member’s responsibility.</p>
+        <h3>Travel to Corporate Offices</h3>
+        <p>Limit to essential trips when virtual options are not feasible. Corporate‑office meals with traveling Team Members are charged to <strong>Staff Appreciation</strong>.</p>
+        <h3>Metadata</h3>
+        <ul>
+          <li><strong>Policy Name:</strong> PHL Travel, Business Expense &amp; Expense Reports</li>
+          <li><strong>Policy No.:</strong> FN10</li>
+          <li><strong>Category:</strong> Finance</li>
+          <li><strong>Applies to:</strong> PHL‑based Team Members</li>
+          <li><strong>Original Effective Date:</strong> 01/06/2025</li>
+          <li><strong>Last Reviewed:</strong> 07/03/2025</li>
+          <li><strong>Annual Review Month:</strong> July</li>
+          <li><strong>Approval Authority:</strong> Chief Financial Officer</li>
+        </ul>
+      </section>
+
+      <p class="footer"><strong>Carenet Confidential &amp; Proprietary.</strong> Policies and procedures are under continuous review and may change at any time. The most current version is maintained by Finance and People Services.</p>
+    </main>
+  </div>
 
   <script>
-    // ---------- Editable data (customize for your company) ----------
-    const CONFIG = {
-      companyName: "Carenet",
-      contactEmail: "finance@carenethealthcare.com",
-      resources: [
-        // { label: "Full Corporate Expense Policy (PDF)", href: "./Corporate-Expense-Policy.pdf" }
-      ],
-      categories: [
-        {
-          id: "overview",
-          label: "Overview",
-          items: [
-            {
-              id: "goal",
-              title: "Goal",
-              updated: "2018-02-01",
-              body: `To set forth the Company guidelines that apply to all Team Members who use the corporate credit card.`
-            },
-            {
-              id: "policy-scope",
-              title: "Policy & Scope",
-              updated: "2018-02-01",
-              body: `Carenet conveys expectations and procedures for use, safeguarding, payment, and termination of the corporate credit card. This policy applies to any Team Member who signs out a card for use or is issued a card. The cardholder, the person signing out a shared card, and the Supervisor are responsible for adherence and for minimizing the risk of fraudulent or improper use. Corporate cards provide an efficient, flexible, alternative means of payment for approved expenses.`
-            }
-          ]
-        },
-        <br><br>
-        {
-          id: "eligibility",
-          label: "Eligibility & Approval",
-          items: [
-            {
-              id: "eligibility-criteria",
-              title: "Eligibility",
-              updated: "2018-02-01",
-              body: `Carenet maintains a corporate credit card program for full‑time Team Members who will regularly incur business expenses. Eligible Team Members travel frequently as part of their duties, purchase significant volumes of minor goods/services for company use, or frequently incur other business‑related expenses appropriately paid by a corporate card.`
-            },
-            {
-              id: "approval-process",
-              title: "Approval & Issuance",
-              updated: "2018-02-01",
-              body: `Eligible Team Members should contact the CFO (Plan Administrator), who will arrange issuance. Based on business needs, Carenet will offer eligible Team Members a corporate credit card for approved expenses. Newly issued cards must be signed by the cardholder upon receipt.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "checkout",
-          label: "Signing Out a Card",
-          items: [
-            {
-              id: "card-signout",
-              title: "Shared Card Sign‑Out",
-              updated: "2018-02-01",
-              body: `Team Members not eligible for an individual card may sign out a corporate card from Finance for approved purchases. The person signing out the card is responsible for all charges until the card is returned. Cards must be signed out for each transaction and returned promptly to Finance. Failure to sign out a card and using a stored card will result in disciplinary action, including loss of future access.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "use",
-          label: "Use & Responsibilities",
-          items: [
-            {
-              id: "business-use-only",
-              title: "Business Use Only",
-              updated: "2018-02-01",
-              body: `The corporate card may be used only for official business expenditures, not personal expenses. Card users must ensure purchases are within budget and properly approved. Carenet pays the monthly balance for approved charges.`
-            },
-            {
-              id: "card-custody",
-              title: "Card Custody & Delegation",
-              updated: "2018-02-01",
-              body: `Issued corporate credit cards may be used by individuals designated by the cardholder. The cardholder remains accountable for all activity on the card.`
-            },
-            {
-              id: "secure-online",
-              title: "Secure Online Use",
-              updated: "2018-02-01",
-              body: `When making approved internet purchases, use recognized encryption (https). Card numbers must not be saved or stored in online accounts or browsers.`
-            },
-            {
-              id: "lost-stolen",
-              title: "Lost or Stolen Cards",
-              updated: "2018-02-01",
-              body: `Report immediately to American Express and to the Carenet Finance Department.`
-            }
-          ]
-        },
-        <br><br>
-        {
-          id: "receipts",
-          label: "Receipts & Expense Reports",
-          items: [
-            {
-              id: "receipt-requirements",
-              title: "Receipt Requirements & Expense Submission",
-              updated: "2018-02-01",
-              body: `Maintain physical proof (itemized receipt) of each credit transaction and provide an itemized, approved expense report to Finance. Missing receipts or inadequate explanations may result in payroll deduction, forfeiture of reimbursement, and/or disciplinary action. Credible documentation includes: date, vendor, description, amount, total, and proof of purchase. When applicable, annotate business purpose and attendees with titles/affiliations. Receipts are encouraged to be uploaded to the Emburse system as they are incurred.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "verification",
-          label: "Verification of Charges",
-          items: [
-            {
-              id: "monthly-verification",
-              title: "Monthly Review",
-              updated: "2018-02-01",
-              body: `Finance downloads charges and sends them to the cardholder monthly for review. If an expense report is not received within 2–3 business days after notice, a reminder will be sent. Continued or repeated non‑conformance may result in card cancellation and/or other actions.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "disputes",
-          label: "Disputed Items",
-          items: [
-            {
-              id: "cardholder-disputes",
-              title: "Dispute Process",
-              updated: "2018-02-01",
-              body: `Cardholders must follow up on erroneous charges, returns, or adjustments to ensure proper credit on subsequent statements. Disputes must be reported to American Express immediately for resolution; inform the CFO or Finance as well.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "violations",
-          label: "Violations & Consequences",
-          items: [
-            {
-              id: "violation-examples",
-              title: "Examples of Violations",
-              updated: "2018-02-01",
-              body: `Prohibited actions include, but are not limited to: cash advances or other non‑business expenses; personal transactions; allowing unauthorized users to use the card; failing to return a shared card promptly; leaving the card unattended; not submitting expense reports with proper receipts by deadlines; saving card numbers on computers, sites, or phones.`
-            },
-            {
-              id: "enforcement",
-              title: "Enforcement",
-              updated: "2018-02-01",
-              body: `Transactions are heavily scrutinized for compliance. Infractions may result in disciplinary action up to and including termination. Carenet will consider the facts and circumstances of each incident and take appropriate action, including recovery of monetary amounts. Carenet may suspend or cancel privileges at any time for any reason. The card must be surrendered to Finance upon request.`
-            }
-          ]
-        },
-      <br><br>
-        {
-          id: "termination",
-          label: "Card Cancellation & Offboarding",
-          items: [
-            {
-              id: "cancellation",
-              title: "Cancellation of the Credit Card",
-              updated: "2018-02-01",
-              body: `Upon notice of Team Member resignation, the card must be returned to Finance. The cardholder must reconcile all expenditures since the last statement, and ensure the account is settled prior to departure.`
-            }
-          ]
-        }
-      ]
-    };
+    // --- Dark mode toggle ---
+    const darkBtn = document.getElementById('darkModeBtn');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('carenet_theme');
+    if (saved === 'dark') { root.classList.add('dark'); darkBtn.setAttribute('aria-pressed','true'); }
+    darkBtn.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      const isDark = root.classList.contains('dark');
+      darkBtn.setAttribute('aria-pressed', String(isDark));
+      localStorage.setItem('carenet_theme', isDark ? 'dark' : 'light');
+    });
 
-    // ---------- Utility helpers ----------
-    const qs = s => document.querySelector(s);
-    const el = (tag, attrs = {}, children = []) => {
-      const n = document.createElement(tag);
-      for (const [k,v] of Object.entries(attrs)) {
-        if (k === 'class') n.className = v;
-        else if (k === 'html') n.innerHTML = v;
-        else if (k.startsWith('on') && typeof v === 'function') n.addEventListener(k.slice(2), v);
-        else if (v !== null && v !== undefined) n.setAttribute(k, v);
-      }
-      for (const c of children) n.append(c);
-      return n;
-    };
-
-    function formatDate(iso) {
-      if (!iso) return '';
-      const d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'2-digit' });
-    }
-
-    function mountResources(actionsEl) {
-      if (!CONFIG.resources?.length) return;
-      for (const r of CONFIG.resources) {
-        const a = el('a', { href: r.href, target: '_blank', rel: 'noopener', class: 'btn link' });
-        a.textContent = r.label;
-        actionsEl.prepend(a);
-      }
-    }
-
-    function mountFilters() {
-      const holder = qs('#filterPills');
-      const allBtn = el('button', { class:'pill active', 'data-id': 'all', onclick: () => setFilter('all') }, ['All']);
-      holder.append(allBtn);
-      for (const c of CONFIG.categories) {
-        holder.append(el('button', { class:'pill', 'data-id': c.id, onclick: () => setFilter(c.id) }, [c.label]));
-      }
-    }
-
-    function setFilter(id) {
-      for (const b of document.querySelectorAll('.pill')) b.classList.toggle('active', b.dataset.id === id);
-      for (const sec of document.querySelectorAll('[data-category]')) {
-        const show = (id === 'all' || sec.dataset.category === id);
-        sec.style.display = show ? '' : 'none';
-      }
-      buildTOC();
-    }
-
-    function buildPolicies() {
-      const grid = qs('#policyGrid');
-      grid.innerHTML = '';
-
-      CONFIG.categories.forEach(cat => {
-        const section = el('section', { class:'card', id: cat.id, 'data-category': cat.id, role:'region', 'aria-labelledby': `${cat.id}-title`});
-        const head = el('div', { class:'card-head', style:'padding:16px' }, [
-          el('div', {}, [
-            el('h2', { id:`${cat.id}-title`, class:'title' }, [cat.label]),
-            el('div', { class:'meta' }, [`${cat.items.length} topic${cat.items.length>1?'s':''}`])
-          ])
-        ]);
-        section.append(head);
-
-        cat.items.forEach(item => {
-          const d = el('details', { id: item.id, 'data-search-text': (item.title + ' ' + item.body).toLowerCase() });
-          const sum = el('summary', {}, [
-            el('span', { class:'chev', 'aria-hidden':'true' }, ['▶']),
-            el('span', { class:'summary-title' }, [item.title]),
-            el('span', { class:'meta' }, [ item.updated ? `Updated ${formatDate(item.updated)}` : '' ])
-          ]);
-          const content = el('div', { class:'content', role:'region', 'aria-label': item.title });
-          content.innerHTML = `<p>${item.body}</p>`;
-          d.append(sum, content);
-          section.append(d);
-        });
-
-        grid.append(section);
-      });
-
-      const last = document.querySelector('[data-last-updated]');
-      const latest = CONFIG.categories.flatMap(c => c.items.map(i => i.updated)).filter(Boolean).sort().pop();
-      if (last && latest) last.textContent = formatDate(latest);
-    }
-
-    function buildTOC() {
-      const toc = qs('#toc');
-      toc.innerHTML = '';
-      toc.append(el('h3', {}, ['On this page']));
-
-      const visibleSections = Array.from(document.querySelectorAll('[data-category]')).filter(sec => sec.style.display !== 'none');
-      for (const sec of visibleSections) {
-        const cat = CONFIG.categories.find(c => c.id === sec.dataset.category);
-        toc.append(el('a', { href: `#${cat.id}` }, [cat.label]));
-        const items = sec.querySelectorAll('details');
-        items.forEach(d => toc.append(el('a', { style:'margin-left:10px', href: `#${d.id}` }, [d.querySelector('.summary-title').textContent])));
-      }
-    }
-
-    function setupSearch() {
-      const input = qs('#search');
-      const onSearch = () => {
-        const q = input.value.trim().toLowerCase();
-        for (const det of document.querySelectorAll('details')) {
-          const txt = det.dataset.searchText || '';
-          if (!q) { det.style.display = ''; continue; }
-          det.style.display = txt.includes(q) ? '' : 'none';
-        }
-        buildTOC();
-      };
-      input.addEventListener('input', onSearch);
-      window.addEventListener('keydown', (e) => {
-        if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
-          e.preventDefault(); input.focus();
+    // --- TOC active link highlighting ---
+    const links = Array.from(document.querySelectorAll('nav.toc a'));
+    const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = '#' + entry.target.id;
+          links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
         }
       });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.01 });
+    sections.forEach(sec => obs.observe(sec));
+
+    // --- Search (simple highlight + count) ---
+    const searchInput = document.getElementById('search');
+    const resultCount = document.getElementById('resultCount');
+    let lastQuery = '';
+    function clearMarks(root) {
+      root.querySelectorAll('mark').forEach(m => m.replaceWith(document.createTextNode(m.textContent)));
     }
-
-    function setupExpandCollapse() {
-      qs('#expandAllBtn').addEventListener('click', () => document.querySelectorAll('details').forEach(d => d.open = true));
-      qs('#collapseAllBtn').addEventListener('click', () => document.querySelectorAll('details').forEach(d => d.open = false));
-    }
-
-    function setupPrint() { qs('#printBtn').addEventListener('click', () => window.print()); }
-
-    function setupTheme() {
-      const btn = qs('#toggleThemeBtn');
-      const params = new URLSearchParams(location.search);
-      const force = params.get('theme');
-      const hideHeader = params.get('hideHeader');
-      if (hideHeader) document.querySelector('header').style.display = 'none';
-
-      if (force) { document.documentElement.dataset.theme = force; }
-      const apply = () => {
-        const m = document.documentElement.dataset.theme;
-        btn.setAttribute('aria-pressed', m === 'dark');
-      };
-      btn.addEventListener('click', () => {
-        const cur = document.documentElement.dataset.theme;
-        document.documentElement.dataset.theme = cur === 'dark' ? 'light' : 'dark';
-        apply();
+    function highlight(term) {
+      const content = document.getElementById('content');
+      clearMarks(content);
+      if (!term) { resultCount.textContent = ''; return; }
+      const regex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      let count = 0;
+      const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+        acceptNode: node => {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest('nav, header, script, style')) return NodeFilter.FILTER_REJECT;
+          return regex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
       });
-      apply();
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => {
+        const frag = document.createDocumentFragment();
+        let text = node.nodeValue; let match; let lastIdx = 0; regex.lastIndex = 0;
+        while ((match = regex.exec(text)) !== null) {
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+          const m = document.createElement('mark'); m.textContent = match[0]; frag.appendChild(m); count++;
+          lastIdx = regex.lastIndex;
+        }
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+        node.parentNode.replaceChild(frag, node);
+      });
+      resultCount.textContent = count ? count + ' result' + (count>1?'s':'') : 'No results';
     }
-
-    function openHash() {
-      const id = decodeURIComponent(location.hash.replace('#',''));
-      if (!id) return;
-      const elx = document.getElementById(id);
-      if (elx && elx.tagName.toLowerCase() === 'details') elx.open = true;
-    }
-
-    function init() {
-      mountResources(qs('.actions'));
-      buildPolicies();
-      mountFilters();
-      buildTOC();
-      setupSearch();
-      setupExpandCollapse();
-      setupPrint();
-      setupTheme();
-      openHash();
-      window.addEventListener('hashchange', openHash);
-    }
-    document.addEventListener('DOMContentLoaded', init);
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.trim();
+      if (q === lastQuery) return; lastQuery = q; highlight(q);
+    });
   </script>
 </body>
 </html>
